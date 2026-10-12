@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cashcast: know which invoices will be paid late</title>
+  <meta name="description" content="Cashcast predicts which unpaid invoices will be paid late and when the money will arrive. TabPFN runs on your own laptop, so client data stays local." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230f766e'/%3E%3Cpath d='M9 21l5-6 4 3 5-7' stroke='white' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="wrap top-inner">
+      <div class="brand">
+        <span class="logo" aria-hidden="true"></span>
+        <div>
+          <h1>Cashcast</h1>
+          <p class="tag">Know which invoices will be paid late, and when the money will arrive.</p>
+        </div>
+      </div>
+      <nav class="links">
+        <a href="#evidence">Evidence</a>
+        <a href="#own">Your invoices</a>
+        <a href="https://github.com/StarKnightt/cashcast">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="mode" id="mode-banner">
+      <strong id="mode-title">Demo mode.</strong>
+      <span id="mode-text">You are looking at real predictions made on IBM's public accounts receivable sample (100 business clients, 2012 to 2013). Pick a date, see what Cashcast would have told you that morning, then reveal what actually happened.</span>
+    </section>
+
+    <section class="controls" aria-label="Replay date">
+      <div class="dates" id="dates" role="tablist"></div>
+      <label class="reveal">
+        <input type="checkbox" id="reveal" />
+        <span>Reveal what happened</span>
+      </label>
+    </section>
+
+    <section class="kpis" id="kpis"></section>
+
+    <section class="grid">
+      <div class="card span2">
+        <div class="card-head">
+          <h2>Unpaid invoices, riskiest first</h2>
+          <div class="filters">
+            <button class="chip active" data-filter="all">All</button>
+            <button class="chip" data-filter="act">Needs action</button>
+            <button class="chip" data-filter="overdue">Overdue</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table id="table">
+            <thead>
+              <tr>
+                <th>Invoice</th>
+                <th class="num">Amount</th>
+                <th>Due</th>
+                <th>Chance of paying late</th>
+                <th>Likely paid</th>
+                <th>Suggested next step</th>
+                <th class="reveal-col">What happened</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p class="foot" id="table-foot"></p>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h2>Cash expected from these invoices</h2></div>
+        <div id="cash"></div>
+        <p class="foot">Bars: expected amount per week. Whiskers: 80% range from 2,000 simulated payment schedules. <span class="reveal-inline">Dots: what was actually paid.</span></p>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h2>How the numbers are made</h2></div>
+        <ol class="how">
+          <li>Cashcast reads your invoice history: client, issue date, due date, amount, paid date.</li>
+          <li>For every invoice it computes what you knew on the day you sent it: how that client paid before, how many of their invoices were still open, the amount compared with their usual.</li>
+          <li><a href="https://github.com/PriorLabs/TabPFN">TabPFN</a>, an open tabular foundation model, learns from your paid invoices in one pass (no training loop) and returns a full distribution of days to payment for each open one.</li>
+          <li>Code turns that distribution into a late-payment chance, a payment date range that accounts for how long the invoice has already been open, and a weekly cash forecast.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="card evidence" id="evidence">
+      <div class="card-head"><h2>Does it work? A backtest on 2013</h2></div>
+      <p class="lead" id="ev-lead"></p>
+      <div class="table-wrap"><table id="ev-table"></table></div>
+      <p class="lead" id="ev-honest"></p>
+      <h3>Do the ranges fit the client?</h3>
+      <div class="table-wrap"><table id="adapt-table"></table></div>
+      <div class="ev-grid">
+        <div>
+          <h3>Is "60% chance" really 60%?</h3>
+          <div id="calib"></div>
+        </div>
+        <div>
+          <h3>Replay check (the numbers shown above)</h3>
+          <ul class="facts" id="replay-facts"></ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="card own" id="own">
+      <div class="card-head"><h2>Use it on your own invoices</h2></div>
+      <div id="own-local" hidden>
+        <p>Local mode is on. Your file is read by the Python process on this computer and is not sent anywhere else.</p>
+        <form id="upload">
+          <input type="file" id="file" accept=".csv,text/csv" required />
+          <label>As of <input type="date" id="asof" /></label>
+          <button type="submit" class="primary">Score my invoices</button>
+        </form>
+        <p class="small">No file at hand? <button type="button" class="chip" id="try-sample">Score the sample ledger as of Sep 1, 2013</button> or <a href="sample.csv" download>download it</a> to see the format.</p>
+        <p class="foot" id="upload-status"></p>
+      </div>
+      <div id="own-static">
+        <p>This page is static, so it cannot read your file. Run Cashcast on your laptop instead; it needs Python 3.10 or newer and works on a CPU.</p>
+<pre><code>git clone https://github.com/StarKnightt/cashcast
+cd cashcast
+pip install -r requirements.txt
+python -m cashcast.serve      # opens http://localhost:8765</code></pre>
+        <p>Your CSV needs one row per invoice with the columns <code>client, invoice_id, issued, due, amount, paid</code>. Leave <code>paid</code> empty for invoices that are still open. <a href="sample.csv" download>Download a sample CSV</a>.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="wrap footer">
+    <p>Built with PriorLabs-TabPFN (TabPFN v2 weights, Prior Labs License 1.1). Demo data: IBM Watson Analytics sample "Accounts Receivable" (amounts have no currency in the source). Cashcast is MIT licensed. Predictions are estimates, not advice.</p>
+  </footer>
+
+  <script src="app.js" type="module"></script>
+</body>
+</html>

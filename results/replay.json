@@ -1,0 +1,17 @@
+{
+  "snapshots": 10,
+  "open_invoice_rows": 905,
+  "not_yet_due_rows": 784,
+  "late_auc": 0.856,
+  "late_brier": 0.156,
+  "late_base_rate": 0.432,
+  "reminder_now_rows": 296,
+  "reminder_now_late_share": 0.78,
+  "pay_band_coverage": 0.771,
+  "pay_date_mae_days": 5.78,
+  "cash_weeks": 80,
+  "cash_band_coverage": 0.675,
+  "cash_week_mae": 176.5,
+  "cash_week_mean_actual": 693.5,
+  "seconds_per_snapshot": 40.0
+}

@@ -5,3 +5,4 @@ data/raw/
 .tabpfn_models/
 node_modules/
 tmp/
+results/backtest_predictions.csv
