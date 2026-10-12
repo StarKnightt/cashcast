@@ -1,0 +1,247 @@
+{
+  "dataset": {
+    "name": "IBM Watson Analytics sample: accounts receivable (late payment histories)",
+    "invoices": 2466,
+    "clients": 100,
+    "late_share": 0.356,
+    "first_invoice": "2012-01-03",
+    "last_invoice": "2013-12-02"
+  },
+  "months": [
+    "2013-01",
+    "2013-02",
+    "2013-03",
+    "2013-04",
+    "2013-05",
+    "2013-06",
+    "2013-07",
+    "2013-08",
+    "2013-09",
+    "2013-10"
+  ],
+  "max_train_rows": 1000,
+  "summary": [
+    {
+      "model": "TabPFN",
+      "invoices": 1075,
+      "auc": 0.882,
+      "brier": 0.127,
+      "log_loss": 0.401,
+      "accuracy": 0.828,
+      "chase_recall": 0.51,
+      "days_mae": 5.92,
+      "coverage_80": 0.791,
+      "band_width": 17.8
+    },
+    {
+      "model": "Base rate",
+      "invoices": 1075,
+      "auc": 0.5,
+      "brier": 0.218,
+      "log_loss": 0.629,
+      "accuracy": 0.677,
+      "chase_recall": 0.184,
+      "days_mae": 10.11
+    },
+    {
+      "model": "Client history",
+      "invoices": 1075,
+      "auc": 0.87,
+      "brier": 0.135,
+      "log_loss": 0.424,
+      "accuracy": 0.822,
+      "chase_recall": 0.507,
+      "days_mae": 6.54
+    },
+    {
+      "model": "Logistic / linear",
+      "invoices": 1075,
+      "auc": 0.89,
+      "brier": 0.122,
+      "log_loss": 0.386,
+      "accuracy": 0.833,
+      "chase_recall": 0.504,
+      "days_mae": 5.81,
+      "coverage_80": 0.793,
+      "band_width": 18.4
+    },
+    {
+      "model": "Gradient-boosted trees",
+      "invoices": 1075,
+      "auc": 0.864,
+      "brier": 0.154,
+      "log_loss": 0.564,
+      "accuracy": 0.792,
+      "chase_recall": 0.499,
+      "days_mae": 6.23,
+      "coverage_80": 0.575,
+      "band_width": 12.7
+    }
+  ],
+  "calibration": [
+    {
+      "bin": "0.0 to 0.2",
+      "n": 586,
+      "predicted": 0.062,
+      "actual": 0.087
+    },
+    {
+      "bin": "0.2 to 0.4",
+      "n": 146,
+      "predicted": 0.291,
+      "actual": 0.336
+    },
+    {
+      "bin": "0.4 to 0.6",
+      "n": 108,
+      "predicted": 0.5,
+      "actual": 0.519
+    },
+    {
+      "bin": "0.6 to 0.8",
+      "n": 119,
+      "predicted": 0.691,
+      "actual": 0.723
+    },
+    {
+      "bin": "0.8 to 1.0",
+      "n": 116,
+      "predicted": 0.874,
+      "actual": 0.905
+    }
+  ],
+  "timings": [
+    {
+      "month": "2013-01",
+      "train": 1000,
+      "test": 111,
+      "seconds": 40.9
+    },
+    {
+      "month": "2013-02",
+      "train": 1000,
+      "test": 100,
+      "seconds": 39.1
+    },
+    {
+      "month": "2013-03",
+      "train": 1000,
+      "test": 106,
+      "seconds": 38.7
+    },
+    {
+      "month": "2013-04",
+      "train": 1000,
+      "test": 112,
+      "seconds": 39.1
+    },
+    {
+      "month": "2013-05",
+      "train": 1000,
+      "test": 125,
+      "seconds": 39.8
+    },
+    {
+      "month": "2013-06",
+      "train": 1000,
+      "test": 99,
+      "seconds": 39.6
+    },
+    {
+      "month": "2013-07",
+      "train": 1000,
+      "test": 107,
+      "seconds": 39.2
+    },
+    {
+      "month": "2013-08",
+      "train": 1000,
+      "test": 103,
+      "seconds": 39.1
+    },
+    {
+      "month": "2013-09",
+      "train": 1000,
+      "test": 118,
+      "seconds": 41.0
+    },
+    {
+      "month": "2013-10",
+      "train": 1000,
+      "test": 94,
+      "seconds": 39.3
+    }
+  ],
+  "adaptivity": {
+    "spread_cuts_days": [
+      6.0,
+      8.0
+    ],
+    "excluded_under_3_prior": 0,
+    "rows": [
+      {
+        "model": "TabPFN",
+        "group": "Steady clients",
+        "invoices": 359,
+        "coverage_80": 0.805,
+        "band_width": 16.0
+      },
+      {
+        "model": "TabPFN",
+        "group": "Middle",
+        "invoices": 360,
+        "coverage_80": 0.833,
+        "band_width": 17.7
+      },
+      {
+        "model": "TabPFN",
+        "group": "Erratic clients",
+        "invoices": 356,
+        "coverage_80": 0.733,
+        "band_width": 19.9
+      },
+      {
+        "model": "Logistic / linear",
+        "group": "Steady clients",
+        "invoices": 359,
+        "coverage_80": 0.838,
+        "band_width": 18.4
+      },
+      {
+        "model": "Logistic / linear",
+        "group": "Middle",
+        "invoices": 360,
+        "coverage_80": 0.842,
+        "band_width": 18.5
+      },
+      {
+        "model": "Logistic / linear",
+        "group": "Erratic clients",
+        "invoices": 356,
+        "coverage_80": 0.697,
+        "band_width": 18.4
+      },
+      {
+        "model": "Gradient-boosted trees",
+        "group": "Steady clients",
+        "invoices": 359,
+        "coverage_80": 0.579,
+        "band_width": 10.7
+      },
+      {
+        "model": "Gradient-boosted trees",
+        "group": "Middle",
+        "invoices": 360,
+        "coverage_80": 0.572,
+        "band_width": 12.2
+      },
+      {
+        "model": "Gradient-boosted trees",
+        "group": "Erratic clients",
+        "invoices": 356,
+        "coverage_80": 0.573,
+        "band_width": 15.2
+      }
+    ]
+  }
+}
